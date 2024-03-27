@@ -39,13 +39,19 @@ function setPersonelListToTable() {
     let value = "";
 
     for (const index in personelList) {
+
+        const date = new Date(personelList[index].startDate);
+        const newDate = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+
+        const salary = formatSalary(personelList[index].salary.replace(",","."));
+
         value += `  <tr>
         <td>${+index + 1}</td>
         <td>${personelList[index].firstName}</td>
         <td>${personelList[index].lastName}</td>
         <td>${personelList[index].profession}</td>
-        <td>${personelList[index].startDate}</td>
-        <td>${personelList[index].salary}</td>
+        <td>${newDate}</td>
+        <td>${salary}</td>
         <td>
             <button class="btn btn-sm btn-outline-primary">Update</button>
             <button class="btn btn-sm btn-outline-danger">Delete</button>
@@ -54,4 +60,17 @@ function setPersonelListToTable() {
     }
 
     tbodyElement.innerHTML = value;    
+}
+
+
+function formatSalary(salaryString){
+    const salaryNumber = +salaryString;
+
+    const formatter = new Intl.NumberFormat('tr-TR',{
+        style: "currency",
+        currency: "TRY",
+        minimumFractionDigits: 2
+    });
+
+    return formatter.format(salaryNumber);
 }
