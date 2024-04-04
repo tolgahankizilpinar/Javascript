@@ -1,56 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personel Javascript App</title>
+    <title>Personel JavaScript App</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-
 <body>
     <h1 class="alert alert-secondary text-center">Personel App</h1>
     <!-- Add Form -->
-    <div id="addPersonnelForm" class="row justify-content-center" style="display: none;">
+    <div class="row justify-content-center" id="addPersonelForm" style="display: none;">
         <div class="col-xl-4 col-lg-6 col-md-12 col-12">
             <div class="card">
                 <div class="card-header">
                     <h4>Add Personel Form</h4>
-                    <p>Please fill your personal information to save.</p>
+                    <p>Please fill your personel information to save</p>
                 </div>
                 <div class="card-body">
-                    <form onsubmit="save(event)">
+                    <form onsubmit="save(event)" autocomplete="off">
                         <div class="form-group">
                             <label>First Name</label>
-                            <input id="firstName" class="form-control" type="text" required minlength="3">
+                            <input id="firstName" type="text" class="form-control" required minlength="3">
                         </div>
                         <div class="form-group mt-1">
                             <label>Last Name</label>
-                            <input id="lastName" class="form-control" type="text" required minlength="3">
+                            <input id="lastName" type="text" class="form-control" required minlength="3">
                         </div>
                         <div class="form-group mt-1">
                             <label>Profession</label>
                             <select id="profession" class="form-control" required>
-                                <option value="">Select one</option>
-                                <option>Back-End Developer</option>
-                                <option>Front-End Developer</option>
-                                <option>Full Stack Developer</option>
-                                <option>Business Analysis</option>
+                                <option value="">Select one...</option>
+                                <option>Software</option>
+                                <option>Fullstack</option>
+                                <option>Human Resourses</option>
                             </select>
                         </div>
                         <div class="form-group mt-1">
                             <label>Start Date</label>
-                            <input id="startDate" class="form-control" type="date" required value="2024-03-25">
+                            <input id="startDate" type="date" class="form-control" required value="2024-03-18">
                         </div>
-                        <div class="form-group mt-1">
-                            <label>Salary</label>
-                            <input id="salary" class="form-control" type="text" required value="17002">
-                        </div>
+                        @if(isToken){
+                            <div class="form-group mt-1" id="salaryFormGroup">
+                                <label>Salary</label>
+                                <input id="salary" type="text" class="form-control" required value="17002">
+                            </div>
+                        }                        
                         <div class="form-group mt-2">
                             <button type="submit" class="btn btn-dark w-100">
+                                <i class="fa-solid fa-save"></i>
                                 Save
                             </button>
-                            <button onclick="showOrHideAddPersonnelForm()" type="button" class="btn btn-danger mt-2 w-100">
+                            <button onclick="showOrHideAddPersonelForm()" type="button" class="btn btn-danger mt-2 w-100">
+                                <i class="fa-solid fa-x"></i>
                                 Cancel
                             </button>
                         </div>
@@ -60,47 +61,48 @@
         </div>
     </div>
 
-    <!-- Update Form -->
-    <div id="updatePersonnelForm" class="row justify-content-center" style="display: none;">
+    <!-- Update Form -->    
+    <div class="row justify-content-center" id="updatePersonelForm" style="display: none;">
         <div class="col-xl-4 col-lg-6 col-md-12 col-12">
             <div class="card">
                 <div class="card-header">
                     <h4>Update Personel Form</h4>
-                    <p>Please fill your personal information to update.</p>
+                    <p>Please fill your personel information to update</p>
                 </div>
                 <div class="card-body">
-                    <form onsubmit="update(event)">
+                    <form onsubmit="update(event)" autocomplete="off">
                         <div class="form-group">
                             <label>First Name</label>
-                            <input id="updateFirstName" class="form-control" type="text" required minlength="3">
+                            <input id="updateFirstName" type="text" class="form-control" required minlength="3">
                         </div>
                         <div class="form-group mt-1">
                             <label>Last Name</label>
-                            <input id="updateLastName" class="form-control" type="text" required minlength="3">
+                            <input id="updateLastName" type="text" class="form-control" required minlength="3">
                         </div>
                         <div class="form-group mt-1">
                             <label>Profession</label>
                             <select id="updateProfession" class="form-control" required>
-                                <option value="">Select one</option>
-                                <option>Back-End Developer</option>
-                                <option>Front-End Developer</option>
-                                <option>Full Stack Developer</option>
-                                <option>Business Analysis</option>
+                                <option value="">Select one...</option>
+                                <option>Software</option>
+                                <option>Fullstack</option>
+                                <option>Human Resourses</option>
                             </select>
                         </div>
                         <div class="form-group mt-1">
                             <label>Start Date</label>
-                            <input id="updateStartDate" class="form-control" type="date" required value="2024-03-25">
+                            <input id="updateStartDate" type="date" class="form-control" required value="2024-03-18">
                         </div>
                         <div class="form-group mt-1">
                             <label>Salary</label>
-                            <input id="updateSalary" class="form-control" type="text" required value="17002">
+                            <input id="updateSalary" type="text" class="form-control" required value="17002">
                         </div>
                         <div class="form-group mt-2">
                             <button type="submit" class="btn btn-primary w-100">
+                                <i class="fa-solid fa-edit"></i>
                                 Update
                             </button>
                             <button onclick="closeUpdateForm()" type="button" class="btn btn-danger mt-2 w-100">
+                                <i class="fa-solid fa-x"></i>
                                 Cancel
                             </button>
                         </div>
@@ -110,13 +112,16 @@
         </div>
     </div>
 
-    <!-- Add Personnel Btn -->
-    <div class="form-group" id="addPersonnelBtnDiv">
-        <button onclick="showOrHideAddPersonnelForm()" class="btn btn-dark"><i class="fa-solid fa-plus"></i>Add Personnel</button>
-    </div>
+    <!-- Add Personel Btn -->
+    <div class="form-group" id="addPersonelBtnDiv">
+        <button onclick="showOrHideAddPersonelForm()" class="btn btn-dark">
+            <i class="fa-solid fa-plus"></i>
+            Add Personel
+        </button>
+    </div>    
 
-    <!--Personnel List  -->
-    <div class="form-group mt-1" style="overflow: auto;">    
+    <!-- Personel List -->
+    <div class="form-group mt-2" style="overflow: auto;">
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
@@ -130,16 +135,13 @@
                 </tr>
             </thead>
             <tbody>
-
-
-
-            </tbody>
+                
+            </tbody>            
         </table>
     </div>
 
-    <script src="https://kit.fontawesome.com/0a6fb0f684.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/dc59d75dac.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="./personel.js"></script>
 </body>
-
 </html>

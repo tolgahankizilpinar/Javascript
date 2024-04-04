@@ -1,31 +1,37 @@
-let personelList = [
+let personels = [
     {
-        firstName: "Tolgahan",
-        lastName: "kizilpinar",
-        profession: "Back-End Developer",
-        startDate: "2023-05-17",
-        salary: "20000"
-    }, 
+        firstName: "Tolgahan1",
+        lastName: "Kizilpinar",
+        profession:"Software",
+        startDate: "2024-01-31",
+        salary:"185000.25"
+    },
     {
-        firstName: "Tolgahan",
-        lastName: "kizilpinar",
-        profession: "Back-End Developer",
-        startDate: "2023-05-17",
-        salary: "20000"
-    }, 
+        firstName: "Tolgahan2",
+        lastName: "Kizilpinar",
+        profession:"Software",
+        startDate: "2024-03-29",
+        salary:"70000"
+    },
     {
-        firstName: "Tolgahan",
-        lastName: "kizilpinar",
-        profession: "Back-End Developer",
-        startDate: "2023-05-17",
-        salary: "20000"
+        firstName: "Tolgahan3",
+        lastName: "Kizilpinar",
+        profession:"Software",
+        startDate: "2024-03-29",
+        salary:"175000"
+    },
+    {
+        firstName: "Tolgahan4",
+        lastName: "Kizilpinar",
+        profession:"Software",
+        startDate: "2024-03-29",
+        salary:"17000"
     }
 ];
 
-
 let updateIndex = -1;
 
-function save(event) {
+function save(event){
     event.preventDefault();
     const firstNameInputElement = document.getElementById("firstName");
     const lastNameInputElement = document.getElementById("lastName");
@@ -41,82 +47,83 @@ function save(event) {
         salary: salaryInputElement.value
     }
 
-    personelList.push(data);
-
-    setPersonelListToTable();
+    personels.push(data);
+    
+    setPersonelsToTable();
 
     firstNameInputElement.value = "";
     lastNameInputElement.value = "";
     professionInputElement.value = "";
-    startDateInputElement.value = "2024-03-27";
+    startDateInputElement.value = "2024-03-18"
     salaryInputElement.value = "17002";
 
     firstNameInputElement.focus();
 
-    showToast("Personnel is added succesfuly");
+    showToast("Personel create is successful");
+
 }
 
+setPersonelsToTable();
 
-function setPersonelListToTable() {
+function setPersonelsToTable(){
     const tbodyElement = document.querySelector("tbody");
 
-    personelList = personelList.sort((a, b) => a.firstName.localeCompare(b.firstName)); // sort for first name (A-Z)
+    personels = personels.sort((a,b) => 
+                    a.firstName.localeCompare(b.firstName));
 
     let value = "";
+    for(const index in personels){
 
-    for (const index in personelList) {
+        const date = new Date(personels[index].startDate);
+        const newDate = 
+        `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
 
-        const date = new Date(personelList[index].startDate);
-        const newDate = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+        const salary = 
+        formatSalary(personels[index].salary.replace(",","."));
 
-        const salary = formatSalary(personelList[index].salary.replace(",", "."));
-
-        value += `  <tr>
-        <td>${+index + 1}</td>
-        <td>${personelList[index].firstName}</td>
-        <td>${personelList[index].lastName}</td>
-        <td>${personelList[index].profession}</td>
-        <td>${newDate}</td>
-        <td>${salary}</td>
-        <td>
-            <button onclick="showUpdateForm('${index}')" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-edit"></i>Update</button>
-            <button class="btn btn-sm btn-outline-danger" 
-                onclick="deleteByIndex('${index}')">
-                <i class="fa-solid fa-trash"></i>Delete
-            </button>
-        </td>
-    </tr>`
-    }
+        value += `
+                <tr>
+                    <td>${+index + 1}</td>
+                    <td>${personels[index].firstName}</td>
+                    <td>${personels[index].lastName}</td>
+                    <td>${personels[index].profession}</td>
+                    <td>${newDate}</td>
+                    <td>${salary}</td>
+                    <td>
+                        <button onclick="showUpdateForm(${index})" class="btn btn-sm btn-outline-primary update-delete-group">
+                            <i class="fa-solid fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger update-delete-group" 
+                        onclick="deleteByIndex(${index})">
+                        <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+        `
+    } 
 
     tbodyElement.innerHTML = value;
 }
 
-function deleteByIndex(index) {
-    const personel = personelList[index];
-    Swal.fire({
+function deleteByIndex(index){
+    const personel = personels[index];
+    Swal.fire({ //promise
         title: 'Delete?',
-        text: `Do you want to delete ${personel.firstName} ${personel.lastName}?`,
-        icon: 'question', // info, success, error, question, warning
+        text: 'Do you want to delete ' + personel.firstName + " "  + personel.lastName,
+        icon: 'question', //info, success, error, question, warning
         confirmButtonText: 'Delete',
-        cancelButtonText: 'Cancel',
+        cancelButtonText:'Cancel',
         showCancelButton: true
-    }).then((val) => {
-        if (val.isConfirmed) {
-            personelList.splice(index, 1);
-            setPersonelListToTable();
-
-            showToast("Personnel record has been deleted", "info");
-        }
-    })
-
-    // const result = confirm("Do you want to delete this record?");
-    // if(result){
-    //     personelList.splice(index, 1);
-    //     setPersonelListToTable();
-    // }
+      }).then((val)=> {
+        if(val.isConfirmed === true){
+            personels.splice(index,1); 
+            setPersonelsToTable();          
+            showToast("Personel delete is successful","info");
+         }
+      })
 }
 
-function formatSalary(salaryString) {
+function formatSalary(salaryString){
     const salaryNumber = +salaryString;
 
     const formatter = new Intl.NumberFormat('tr-TR', {
@@ -128,50 +135,71 @@ function formatSalary(salaryString) {
     return formatter.format(salaryNumber);
 }
 
-
-function showToast(message, icon = "success") {
+function showToast(message,icon="success"){
     const Toast = Swal.mixin({
-        toast: true,
+        toast:true,
         position: "bottom-end",
         showConfirmButton: false,
-        timer: 3000
-    });
-    Toast.fire(message, "", icon);
+        timer: 1500
+      });
+      Toast.fire(message, "", icon)
 }
 
-function showOrHideAddPersonnelForm() {
-    const el = document.getElementById("addPersonnelForm");
-    if (el !== null) {
-        if (el.style.display === "flex") {
-            el.style.display = "none";
-
-            const btnEl = document.getElementById("addPersonnelBtnDiv");
-            if (btnEl !== null) {
-                btnEl.style.display = "initial";
-            }
+function showOrHideAddPersonelForm(){
+    const el = document.getElementById("addPersonelForm");
+    if(el !== null){
+        if(el.style.display === "flex"){
+            showOrHideFormAdditionalMethod(el,"none","initial")
+        }else{
+            showOrHideFormAdditionalMethod(el,"flex","none")
         }
-        else{
-            el.style.display = "flex";
+    }
+}
 
-            const btnEl = document.getElementById("addPersonnelBtnDiv");
-            if (btnEl !== null) {
-                btnEl.style.display = "flex";
+function showOrHideFormAdditionalMethod(el,eld,btneld){
+    el.style.display = eld;
+
+    const btnEL = document.getElementById("addPersonelBtnDiv");
+    if(btnEL !== null){
+        btnEL.style.display =btneld;
+    }
+
+    if(eld === "flex"){
+        const inputSalaryEl = document.getElementById("salary");
+        if(!localStorage.getItem("token")){
+          //  inputSalaryEl.style.display = "none"
+           inputSalaryEl.remove();
+        }else{
+            if(inputSalaryEl === null){
+                //inputSalaryEl.style.display = "initial"
+                const salaryFormGroupEl = document.getElementById("salaryFormGroup");
+                salaryFormGroupEl.innerHTML += `
+                <input id="salary" type="text" class="form-control" required value="17002">`
             }
         }
     }
 }
 
-
 function showUpdateForm(index){
-    const personel = personelList[index];
+    const personel = personels[index];
     updateIndex = index;
-    const el = document.getElementById("updatePersonnelForm");
-    const elAdd = document.getElementById("addPersonnelForm");
-    if(el !== null){
-        el.style.display = "flex";
 
-        const addBtnEl = document.getElementById("addPersonnelBtnDiv");
+    const el = document.getElementById("updatePersonelForm");
+    if(el !== null){
+        el.style.display="flex";
+
+        const addBtnEl = document.getElementById("addPersonelBtnDiv");
         addBtnEl.style.display = "none";
+
+        const updateDeleteBtnels = document.querySelectorAll(".update-delete-group");
+        for(let i in updateDeleteBtnels){       
+            if(i === "entries")  break;
+
+            const udBtnEl = updateDeleteBtnels[i];
+            if(udBtnEl !== undefined){
+                udBtnEl.style.display = "none";
+            }            
+        }        
 
         const firstNameEl = document.getElementById("updateFirstName");
         firstNameEl.value = personel.firstName;
@@ -182,41 +210,50 @@ function showUpdateForm(index){
         const professionEl = document.getElementById("updateProfession");
         professionEl.value = personel.profession;
 
-        const StartDateEl = document.getElementById("updateStartDate");
-        StartDateEl.value = personel.startDate;
+        const startDateEl = document.getElementById("updateStartDate");
+        startDateEl.value = personel.startDate;
 
-        const SalaryEl = document.getElementById("updateSalary");
-        SalaryEl.value = personel.salary;
-
-        elAdd.style.display = "none";
+        const salaryEl = document.getElementById("updateSalary");
+        salaryEl.value = personel.salary;
     }
 }
 
 function update(event){
     event.preventDefault();
-    const personel = personelList[updateIndex];
+    const personel = personels[updateIndex];
 
     const firstNameEl = document.getElementById("updateFirstName");
     const lastNameEl = document.getElementById("updateLastName");
     const professionEl = document.getElementById("updateProfession");
-    const StartDateEl = document.getElementById("updateStartDate");
-    const SalaryEl = document.getElementById("updateSalary");
+    const startDateEl = document.getElementById("updateStartDate");
+    const salaryEl = document.getElementById("updateSalary");
 
     personel.firstName = firstNameEl.value;
     personel.lastName = lastNameEl.value;
     personel.profession = professionEl.value;
-    personel.startDate = StartDateEl.value;
-    personel.salary = SalaryEl.value;
+    personel.startDate = startDateEl.value;
+    personel.salary = salaryEl.value;
 
-    setPersonelListToTable();
+    setPersonelsToTable();
     closeUpdateForm();
     updateIndex = -1;
-    showToast("Personnel is updated successfully.","info");
+    showToast("Update personel is successful","info");
 }
 
 function closeUpdateForm(){
-    const el = document.getElementById("updatePersonnelForm");
+    const el = document.getElementById("updatePersonelForm");
     if(el !== null){
         el.style.display = "none";
+
+        const addBtnEl = document.getElementById("addPersonelBtnDiv");
+        addBtnEl.style.display = "initial";
+
+        const updateDeleteBtnels = document.querySelectorAll(".update-delete-group");
+        for(let i in updateDeleteBtnels){            
+            const udBtnEl = updateDeleteBtnels[i];
+            if(udBtnEl !== undefined){
+                udBtnEl.style.display = "initial";
+            }            
+        }
     }
 }
