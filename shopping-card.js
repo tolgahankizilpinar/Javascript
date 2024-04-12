@@ -24,9 +24,9 @@ function setShoppingCardToHTML(){
             </div>
             <div class="card-body text-center">
                 <h4 class="alert alert-danger">
-                    ${shoppingCard.price}
+                    ${formatCurrency(shoppingCard.price)}
                 </h4>
-                <button onclick="addShoppingCard(${index})" class="btn btn-outline-danger w-100">
+                <button onclick="deleteByIndex(${index}, ${shoppingCard.id})" class="btn btn-outline-danger w-100">
                     <i class="bi bi-trash"></i>
                     Delete
                 </button>
@@ -50,4 +50,32 @@ function setShoppingCardCountUsingLocalStorage(){
     const shoppingCardCountElement = document.getElementById("shopping-card-count");
 
     shoppingCardCountElement.innerHTML = cards.length;
+}
+
+function deleteByIndex(index, id){
+    Swal.fire({
+        title: 'Delete!',
+        text: 'Do you want to delete?',
+        icon: 'question',
+        confirmButtonText: 'Delete',
+        showConfirmButton: true,
+        showCancelButton: true,
+        cancelButtonText: "Cancel"
+      }).then((res) => {
+        if(res.isConfirmed){
+            shoppingCards.splice(index, 1);
+
+            localStorage.setItem("myShoppingCards", JSON.stringify(shoppingCards));
+
+            const products = JSON.parse(localStorage.getItem("mystorage"));
+
+            const product = products.find(p => p.id === id);
+            product.stock += 1;
+        
+            localStorage.setItem("mystorage", JSON.stringify(products));
+
+            setShoppingCardToHTML();  
+            setShoppingCardCountUsingLocalStorage();
+        }
+      });
 }
