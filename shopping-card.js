@@ -1,7 +1,7 @@
 let shoppingCards = [];
 
-if(localStorage.getItem("shoppingCards")){
-    shoppingCards = JSON.parse(localStorage.getItem("shoppingCards")); // string i object e çevirmek
+if(localStorage.getItem("myShoppingCards")){
+    shoppingCards = JSON.parse(localStorage.getItem("myShoppingCards")); // string i object e çevirmek
 }
  
 setShoppingCardToHTML();
@@ -43,8 +43,8 @@ function setShoppingCardToHTML(){
 
 function setShoppingCardCountUsingLocalStorage(){
     let cards = [];
-    if (localStorage.getItem("shoppingCards")) {
-        cards = JSON.parse(localStorage.getItem("shoppingCards"));
+    if (localStorage.getItem("myShoppingCards")) {
+        cards = JSON.parse(localStorage.getItem("myShoppingCards"));
     }
 
     const shoppingCardCountElement = document.getElementById("shopping-card-count");
