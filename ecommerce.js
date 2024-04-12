@@ -1,16 +1,19 @@
 let products = [];
+const shoppingCards = [];
 
 if(localStorage.getItem("mystorage")){
     products = JSON.parse(localStorage.getItem("mystorage")); // string i object e çevirmek
 }
 
 setProductToHTML();
+setShoppingCardCountUsingLocalStorage();
 
 function setProductToHTML() {
     const ProductsRowElement = document.getElementById("ProductsRow");
     ProductsRowElement.innerHTML = "";
 
-    for (const product of products) {
+    for (const index in products) {
+        const product = products[index];
         const text = `
     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 mt-2">
     <div class="card">
@@ -24,7 +27,7 @@ function setProductToHTML() {
             <h4 class="alert alert-danger">
                 ${product.price}
             </h4>
-            <button class="btn btn-outline-dark w-100">
+            <button onclick="addShoppingCard(${index})" class="btn btn-outline-dark w-100">
                 <i class="bi bi-cart-plus"></i>
                 Add Shopping Cart
             </button>
@@ -74,4 +77,22 @@ function save(event) {
     toastr.success('Product is added successfully.')
 }
 
+function addShoppingCard(index){
+    const product = products[index];
+    shoppingCards.push(product);
 
+    localStorage.setItem("myShoppingCards", JSON.stringify(shoppingCards));
+  
+    setShoppingCardCountUsingLocalStorage();
+}
+
+function setShoppingCardCountUsingLocalStorage(){
+    let cards = [];
+    if (localStorage.getItem("myShoppingCards")) {
+        cards = JSON.parse(localStorage.getItem("myShoppingCards"));
+    }
+
+    const shoppingCardCountElement = document.getElementById("shopping-card-count");
+
+    shoppingCardCountElement.innerHTML = cards.length;
+}
