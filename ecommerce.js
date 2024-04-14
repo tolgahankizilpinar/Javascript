@@ -1,5 +1,6 @@
 let products = [];
 const shoppingCards = [];
+let image = "";
 
 if(localStorage.getItem("mystorage")){
     products = JSON.parse(localStorage.getItem("mystorage")); // string i object e çevirmek
@@ -56,11 +57,21 @@ function setProductToHTML() {
     }
 }
 
+function getImage(e){
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function(event){
+        image = event.target.result;
+    }
+
+    reader.readAsDataURL(file);
+}
+
 function save(event) {
     event.preventDefault();
     const nameElement = document.getElementById("name");
     const priceElement = document.getElementById("price");
-    const imageElement = document.getElementById("image");
     const stockElement = document.getElementById("stock");
     const id = products.length + 1;
 
@@ -68,7 +79,7 @@ function save(event) {
         id: id,
         name: nameElement.value,
         price: priceElement.value,
-        image: imageElement.value,
+        image: image,
         stock: stockElement.value
     };
 
@@ -78,7 +89,6 @@ function save(event) {
 
     nameElement.value = "";
     priceElement.value = "";
-    imageElement.value = "";
     stockElement.value = 0;
 
     const closeBtnElement = document.getElementById("addProductModalCloseBtn");

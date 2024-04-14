@@ -1,5 +1,5 @@
 function formatCurrency(currency){
-    const currencyNumber = parseInt(currency, 10);
+    const currencyNumber = +currency;
 
     const formatter = new Intl.NumberFormat("tr-TR",{
         style: "currency",
